@@ -48,14 +48,6 @@
                 <h3 class="mb-3" style="color: {{ header_color }};">{{ title }}</h3>
 
                 <div class="bingo-preview mx-auto" style="grid-template-columns: repeat({{ board_size }}, 1fr);">
-                    {% if board_size == 5 %}
-                    {% for letter in ['B', 'I', 'N', 'G', 'O'] %}
-                    <div class="bingo-cell header" style="background-color: {{ header_color }};">
-                        {{ letter }}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
                     {% for row in preview_board %}
                     {% for cell in row %}
                     <div class="bingo-cell {% if cell == 'FREE' %}free{% endif %}"

@@ -3,7 +3,7 @@ from io import BytesIO
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-from reportlab.lib.colors import HexColor, white, Color
+from reportlab.lib.colors import HexColor, white
 from reportlab.lib import colors
 from reportlab.platypus import (
     SimpleDocTemplate,
@@ -123,9 +123,9 @@ def generate_pdf(
     cell_style_small = ParagraphStyle(
         "cell_small",
         alignment=TA_CENTER,
-        fontSize=11,
+        fontSize=10,
         fontName="Helvetica",
-        leading=13,
+        leading=12,
     )
 
     free_style = ParagraphStyle(
@@ -164,18 +164,13 @@ def generate_pdf(
 
         # Title
         story.append(Paragraph(title, title_style))
-        story.append(Spacer(1, 20))
+        story.append(Spacer(1, 10))
 
-        # Build table data
-        page_width = letter[0] - 1.5 * inch  # usable width after margins
-        cell_size = page_width / board_size   # fill the full width so grid is square
+        # Build table data — square cells sized to fit page width
+        page_width = letter[0] - 1.5 * inch   # usable width after margins
+        cell_size = page_width / board_size
 
         table_data = []
-
-        # BINGO headers for 5x5
-        if board_size == 5:
-            headers = ["B", "I", "N", "G", "O"]
-            table_data.append(headers)
 
         # Board rows - wrap words in Paragraphs for text wrapping
         for row in board:
@@ -185,7 +180,7 @@ def generate_pdf(
                     row_data.append(Paragraph("FREE", free_style))
                 else:
                     word = cell_val.capitalize()
-                    style = cell_style_small if len(word) > 12 else cell_style
+                    style = cell_style_small if len(word) > 10 else cell_style
                     row_data.append(Paragraph(word, style))
             table_data.append(row_data)
 
@@ -210,20 +205,13 @@ def generate_pdf(
         ]
 
         if board_size == 5:
-            # Header row styling
-            style_commands.extend(
-                [
-                    ("BACKGROUND", (0, 0), (-1, 0), HexColor(header_color)),
-                    ("TEXTCOLOR", (0, 0), (-1, 0), white),
-                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                    ("FONTSIZE", (0, 0), (-1, 0), 20),
-                    # FREE space (row 3 = header + 2 data rows, col 2)
-                    ("BACKGROUND", (2, 3), (2, 3), HexColor("#f39c12")),
-                ]
+            # FREE space (row 2, col 2 — center of 5x5)
+            style_commands.append(
+                ("BACKGROUND", (2, 2), (2, 2), HexColor("#f39c12"))
             )
 
         # Alternate row backgrounds for readability (light gray on even data rows)
-        start_row = 1 if board_size == 5 else 0
+        start_row = 0
         for i in range(board_size):
             actual_row = start_row + i
             if i % 2 == 1:
