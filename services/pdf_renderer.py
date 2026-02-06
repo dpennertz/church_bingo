@@ -3,7 +3,7 @@ from io import BytesIO
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-from reportlab.lib.colors import HexColor, white
+from reportlab.lib.colors import HexColor
 from reportlab.lib import colors
 from reportlab.platypus import (
     SimpleDocTemplate,
@@ -131,9 +131,8 @@ def generate_pdf(
     free_style = ParagraphStyle(
         "free",
         alignment=TA_CENTER,
-        fontSize=18,
+        fontSize=20,
         fontName="Helvetica-Bold",
-        textColor=white,
     )
 
     story = []
@@ -203,12 +202,6 @@ def generate_pdf(
             ("TOPPADDING", (0, 0), (-1, -1), 2),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
         ]
-
-        if board_size == 5:
-            # FREE space (row 2, col 2 — center of 5x5)
-            style_commands.append(
-                ("BACKGROUND", (2, 2), (2, 2), HexColor("#f39c12"))
-            )
 
         # Alternate row backgrounds for readability (light gray on even data rows)
         start_row = 0

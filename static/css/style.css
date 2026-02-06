@@ -167,10 +167,9 @@
 }
 
 .bingo-cell.free {
-    background: #f39c12;
     font-weight: bold;
-    color: white;
-    font-size: 16px;
+    font-size: 18px;
+    text-transform: uppercase;
 }
 
 .bingo-cell.header {
