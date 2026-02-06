@@ -15,9 +15,9 @@
                             <i class="bi bi-file-earmark-text"></i> Church Bulletin File
                         </label>
                         <input type="file" class="form-control form-control-lg" id="bulletin"
-                               name="bulletin" accept=".pdf,.docx,.doc,.txt" required>
+                               name="bulletin" accept="{{ accept_str }}" required>
                         <div class="form-text">
-                            Accepted formats: PDF, Word (.doc/.docx), or Text (.txt)
+                            Accepted formats: {{ format_text }}
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg" id="uploadBtn">

@@ -109,7 +109,20 @@ def index():
 @app.route("/bingo/upload", methods=["GET", "POST"])
 def bingo_upload():
     if request.method == "GET":
-        return render_template("bingo/upload.html", step=1)
+        exts = Config.ALLOWED_EXTENSIONS
+        accept_str = ",".join(f".{e}" for e in sorted(exts))
+        # Build human-readable format list (e.g. "PDF, Word (.docx), or Text (.txt)")
+        labels = []
+        if "pdf" in exts:
+            labels.append("PDF")
+        if "doc" in exts and "docx" in exts:
+            labels.append("Word (.doc/.docx)")
+        elif "docx" in exts:
+            labels.append("Word (.docx)")
+        if "txt" in exts:
+            labels.append("Text (.txt)")
+        format_text = ", ".join(labels[:-1]) + ", or " + labels[-1] if len(labels) > 1 else labels[0]
+        return render_template("bingo/upload.html", step=1, accept_str=accept_str, format_text=format_text)
 
     # Handle file upload
     if "bulletin" not in request.files:
@@ -122,7 +135,8 @@ def bingo_upload():
         return redirect(url_for("bingo_upload"))
 
     if not file_parser.allowed_file(file.filename, Config.ALLOWED_EXTENSIONS):
-        flash("Unsupported file type. Please upload a PDF, Word (DOC/DOCX), or TXT file.", "danger")
+        ext_list = ", ".join(f".{e}" for e in sorted(Config.ALLOWED_EXTENSIONS))
+        flash(f"Unsupported file type. Please upload one of: {ext_list}", "danger")
         return redirect(url_for("bingo_upload"))
 
     # Save file temporarily
