@@ -158,6 +158,9 @@ def bingo_upload():
         # Compute word frequencies from the full bulletin text
         word_counts = word_extractor.compute_word_frequencies(text, words)
 
+        # Only keep words that appear more than once in the bulletin
+        words = [w for w in words if word_counts.get(w, 0) > 1]
+
         data = get_session_data()
         data["extracted_text"] = text[:2000]  # Store a snippet for reference
         data["full_text"] = text  # Store full text for frequency recalculation
@@ -210,6 +213,9 @@ def bingo_manual_words():
 
     # Compute word frequencies from the input text
     word_counts = word_extractor.compute_word_frequencies(text, words)
+
+    # Only keep words that appear more than once in the text
+    words = [w for w in words if word_counts.get(w, 0) > 1]
 
     data = get_session_data()
     data["suggested_words"] = words

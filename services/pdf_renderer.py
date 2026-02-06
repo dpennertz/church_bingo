@@ -163,7 +163,7 @@ def generate_pdf(
 
         # Title
         story.append(Paragraph(title, title_style))
-        story.append(Spacer(1, 10))
+        story.append(Spacer(1, 20))
 
         # Build table data — square cells sized to fit page width
         page_width = letter[0] - 1.5 * inch   # usable width after margins
