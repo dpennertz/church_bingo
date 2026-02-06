@@ -6,4 +6,5 @@ pypdf
 python-docx
 python-dotenv
 Pillow
+doc2txt
 pywin32; sys_platform == 'win32'

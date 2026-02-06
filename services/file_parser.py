@@ -38,17 +38,29 @@ def _extract_from_docx(filepath):
 
 
 def _extract_from_doc(filepath):
-    """Convert .doc to .docx using MS Word via COM, then extract text.
+    """Extract text from .doc (Word 97-2003) files.
 
-    Only works on Windows with Microsoft Word installed.
-    On Linux/cloud deployments, raises a friendly error.
+    Tries doc2txt first (cross-platform, bundles antiword binary).
+    Falls back to MS Word via COM on Windows if doc2txt is unavailable.
     """
+    # Try doc2txt first — works on Windows, Linux, and macOS
+    try:
+        from doc2txt import extract_text as doc2txt_extract
+        text = doc2txt_extract(filepath, optimize_format=True)
+        if text and text.strip():
+            return text
+    except ImportError:
+        pass  # doc2txt not installed, try COM fallback
+    except Exception:
+        pass  # doc2txt failed, try COM fallback
+
+    # Fallback: Windows COM automation (requires MS Word installed)
     try:
         import pythoncom
         import win32com.client
     except ImportError:
         raise ValueError(
-            "Sorry, .doc files are not supported in the cloud-hosted version. "
+            "Could not process .doc file. "
             "Please save your file as .docx, .pdf, or .txt and try again."
         )
 
