@@ -1,0 +1,9 @@
+venv/
+uploads/
+.env
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+saved_settings.json
+nul

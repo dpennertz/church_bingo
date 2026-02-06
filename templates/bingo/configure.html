@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Configure Board - Sermon BINGO{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">Step 3: Configure Your BINGO Board</h2>
+
+        <form method="POST">
+            <!-- Board size -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-grid-3x3"></i> Board Size
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check form-check-card p-3 border rounded mb-2">
+                                <input class="form-check-input" type="radio" name="board_size"
+                                       id="size4" value="4" {% if board_size == 4 %}checked{% endif %}>
+                                <label class="form-check-label w-100" for="size4">
+                                    <strong>4 x 4</strong>
+                                    <br><small class="text-muted">16 words needed - No free space</small>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-check-card p-3 border rounded mb-2">
+                                <input class="form-check-input" type="radio" name="board_size"
+                                       id="size5" value="5" {% if board_size == 5 %}checked{% endif %}>
+                                <label class="form-check-label w-100" for="size5">
+                                    <strong>5 x 5</strong>
+                                    <br><small class="text-muted">24 words needed - FREE center space</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            You have <strong>{{ word_count }}</strong> words selected.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card count -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-files"></i> Number of Cards
+                    </h5>
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <input type="number" class="form-control form-control-lg"
+                                   name="card_count" id="cardCount"
+                                   value="{{ card_count }}" min="1" max="50">
+                        </div>
+                        <div class="col-md-8">
+                            <small class="text-muted">
+                                Each card will be on its own page in the PDF (1-50 cards).
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Word mode -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-shuffle"></i> Word Arrangement
+                    </h5>
+                    <div class="form-check p-3 border rounded mb-2">
+                        <input class="form-check-input" type="radio" name="word_mode"
+                               id="modeSame" value="same_shuffled"
+                               {% if word_mode == 'same_shuffled' %}checked{% endif %}>
+                        <label class="form-check-label" for="modeSame">
+                            <strong>Same words, different arrangement</strong>
+                            <br><small class="text-muted">
+                                All cards use the same set of words but placed in different positions.
+                                Everyone has the same words to listen for.
+                            </small>
+                        </label>
+                    </div>
+                    <div class="form-check p-3 border rounded">
+                        <input class="form-check-input" type="radio" name="word_mode"
+                               id="modeDifferent" value="different_per_board"
+                               {% if word_mode == 'different_per_board' %}checked{% endif %}>
+                        <label class="form-check-label" for="modeDifferent">
+                            <strong>Different words per board</strong>
+                            <br><small class="text-muted">
+                                Each card can have some unique words not on other cards.
+                                Requires more words in your word list.
+                            </small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('bingo_words') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Words
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Next: Customize Look <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

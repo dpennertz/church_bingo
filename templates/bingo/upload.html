@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Bulletin - Sermon BINGO{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">Step 1: Upload Your Bulletin</h2>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <div class="mb-3">
+                        <label for="bulletin" class="form-label fw-bold">
+                            <i class="bi bi-file-earmark-text"></i> Church Bulletin File
+                        </label>
+                        <input type="file" class="form-control form-control-lg" id="bulletin"
+                               name="bulletin" accept=".pdf,.docx,.doc,.txt" required>
+                        <div class="form-text">
+                            Accepted formats: PDF, Word (.doc/.docx), or Text (.txt)
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg" id="uploadBtn">
+                        <i class="bi bi-cloud-upload"></i> Upload & Extract Words
+                    </button>
+                </form>
+
+                <!-- Loading overlay -->
+                <div id="loadingOverlay" class="loading-overlay d-none">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="fw-bold">Analyzing your bulletin...</p>
+                        <p class="text-muted">Claude AI is extracting meaningful words. This may take a few seconds.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <p class="text-muted">- or -</p>
+            <button class="btn btn-outline-secondary" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#manualEntry">
+                <i class="bi bi-pencil"></i> Enter Words Manually
+            </button>
+        </div>
+
+        <div class="collapse mt-3" id="manualEntry">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('bingo_manual_words') }}">
+                        <div class="mb-3">
+                            <label for="manualText" class="form-label fw-bold">
+                                Paste bulletin text or enter words (one per line or comma-separated)
+                            </label>
+                            <textarea class="form-control" id="manualText" name="manual_text"
+                                      rows="8" placeholder="grace, salvation, faith, prayer, love..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-arrow-right"></i> Use These Words
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('uploadForm').addEventListener('submit', function() {
+    document.getElementById('loadingOverlay').classList.remove('d-none');
+    document.getElementById('uploadBtn').disabled = true;
+});
+</script>
+{% endblock %}

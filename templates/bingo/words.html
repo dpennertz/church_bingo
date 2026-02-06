@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Select Words - Sermon BINGO{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h2 class="mb-3">Step 2: Review & Select Words</h2>
+        <p class="text-muted mb-4">
+            Click words to exclude them. Add your own words below.
+            You need at least <strong>16 words</strong> for a 4x4 board or
+            <strong>24 words</strong> for a 5x5 board.
+            {% if word_counts %}<br><small>The number on each word shows how many times it appears in the bulletin.</small>{% endif %}
+        </p>
+
+        <form method="POST" id="wordsForm">
+            <input type="hidden" name="selected_words" id="selectedWordsInput">
+
+            <!-- Word count indicator -->
+            <div class="alert alert-info d-flex align-items-center mb-3" id="wordCountAlert">
+                <i class="bi bi-info-circle me-2"></i>
+                <span id="wordCountText">Loading...</span>
+            </div>
+
+            <!-- Word chips -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div id="wordContainer" class="word-container">
+                        {% for word in words %}
+                        <span class="word-chip selected" data-word="{{ word }}" data-source="ai" data-count="{{ word_counts.get(word, 0) }}">
+                            {{ word }}{% if word_counts.get(word, 0) > 0 %}<span class="word-count-badge">{{ word_counts[word] }}</span>{% endif %}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add custom word -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="newWordInput"
+                               placeholder="Add a custom word..." maxlength="30">
+                        <button type="button" class="btn btn-success" id="addWordBtn">
+                            <i class="bi bi-plus-lg"></i> Add Word
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm me-2" id="selectAllBtn">
+                        Select All
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="deselectAllBtn">
+                        Deselect All
+                    </button>
+                </div>
+                <div>
+                    <a href="{{ url_for('bingo_upload') }}" class="btn btn-outline-secondary me-2">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg" id="nextBtn">
+                        Next: Configure Board <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/words.js') }}"></script>
+{% endblock %}

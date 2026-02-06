@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Church Activities{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1>Church Activities</h1>
+    <p class="text-muted">Choose an activity to get started</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card activity-card shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="activity-icon mb-3">
+                    <i class="bi bi-grid-3x3-gap-fill"></i>
+                </div>
+                <h3 class="card-title">Sermon BINGO</h3>
+                <p class="card-text text-muted">
+                    Upload your church bulletin and generate custom BINGO cards
+                    with words from the service. Kids listen for the words during
+                    the sermon!
+                </p>
+                <a href="{{ url_for('bingo_upload') }}" class="btn btn-primary btn-lg mt-2">
+                    <i class="bi bi-play-fill"></i> Get Started
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card activity-card shadow-sm opacity-50">
+            <div class="card-body text-center p-4">
+                <div class="activity-icon mb-3">
+                    <i class="bi bi-plus-circle"></i>
+                </div>
+                <h3 class="card-title">More Coming Soon</h3>
+                <p class="card-text text-muted">
+                    Additional activities will be added here in the future.
+                    Stay tuned!
+                </p>
+                <button class="btn btn-secondary btn-lg mt-2" disabled>
+                    Coming Soon
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

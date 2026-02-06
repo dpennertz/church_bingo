@@ -1,0 +1,9 @@
+flask
+gunicorn
+anthropic
+reportlab
+pypdf
+python-docx
+python-dotenv
+Pillow
+pywin32; sys_platform == 'win32'

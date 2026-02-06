@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Customize - Sermon BINGO{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">Step 4: Customize Your Cards</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Title, Church Name & Date -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-type"></i> Text
+                    </h5>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Card Title</label>
+                        <input type="text" class="form-control" id="title" name="title"
+                               value="{{ title }}" maxlength="50" placeholder="Sermon BINGO">
+                    </div>
+                    <div class="mb-3">
+                        <label for="churchName" class="form-label">Church Name (optional)</label>
+                        <input type="text" class="form-control" id="churchName" name="church_name"
+                               value="{{ church_name }}" maxlength="80" placeholder="First Baptist Church">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cardDate" class="form-label">Date (optional)</label>
+                            <input type="date" class="form-control" id="cardDate" name="card_date"
+                                   value="{{ card_date }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cardOccasion" class="form-label">Service / Occasion (optional)</label>
+                            <input type="text" class="form-control" id="cardOccasion" name="card_occasion"
+                                   value="{{ card_occasion }}" maxlength="60"
+                                   placeholder="e.g. Ash Wednesday, Easter Sunday">
+                        </div>
+                    </div>
+                    <div class="form-text mb-0">Date and occasion are displayed at the bottom of each card.</div>
+                </div>
+            </div>
+
+            <div class="alert alert-light border mb-4">
+                <i class="bi bi-info-circle"></i>
+                <small>Title, church name, colors, and footer message are <strong>saved automatically</strong> and will be remembered next time you use the app.</small>
+            </div>
+
+            <!-- Logo -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-image"></i> Logo (optional)
+                    </h5>
+                    <input type="file" class="form-control" name="logo" accept=".png,.jpg,.jpeg">
+                    <div class="form-text">Upload a PNG or JPG image. Will be displayed above the title.</div>
+                    {% if has_logo %}
+                    <div class="mt-2">
+                        <span class="badge bg-success"><i class="bi bi-check"></i> Logo uploaded</span>
+                        <label class="form-check-label ms-2">
+                            <input type="checkbox" name="remove_logo" class="form-check-input"> Remove current logo
+                        </label>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Colors -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-palette"></i> Colors
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="headerColor" class="form-label">Header Color</label>
+                            <div class="d-flex align-items-center">
+                                <input type="color" class="form-control form-control-color me-2"
+                                       id="headerColor" name="header_color" value="{{ header_color }}">
+                                <span class="text-muted" id="headerColorHex">{{ header_color }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="borderColor" class="form-label">Border Color</label>
+                            <div class="d-flex align-items-center">
+                                <input type="color" class="form-control form-control-color me-2"
+                                       id="borderColor" name="border_color" value="{{ border_color }}">
+                                <span class="text-muted" id="borderColorHex">{{ border_color }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Color preview -->
+                    <div class="mt-3 p-3 border rounded text-center" id="colorPreview">
+                        <div class="px-3 py-2 d-inline-block rounded text-white mb-2"
+                             id="previewHeader" style="background-color: {{ header_color }};">
+                            B I N G O
+                        </div>
+                        <div class="border p-2 d-inline-block" id="previewBorder"
+                             style="border-color: {{ border_color }} !important; border-width: 3px !important;">
+                            Sample Cell
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Message -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-chat-left-text"></i> Footer Message (optional)
+                    </h5>
+                    <input type="text" class="form-control" id="footerMessage" name="footer_message"
+                           value="{{ footer_message }}" maxlength="120"
+                           placeholder="e.g. Return bingo cards to Lora after the service to retrieve a prize.">
+                    <div class="form-text">Printed below the date on each card. This setting is saved automatically.</div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('bingo_configure') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Next: Preview & Download <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Live color preview
+document.getElementById('headerColor').addEventListener('input', function() {
+    document.getElementById('previewHeader').style.backgroundColor = this.value;
+    document.getElementById('headerColorHex').textContent = this.value;
+});
+document.getElementById('borderColor').addEventListener('input', function() {
+    document.getElementById('previewBorder').style.borderColor = this.value;
+    document.getElementById('borderColorHex').textContent = this.value;
+});
+</script>
+{% endblock %}
