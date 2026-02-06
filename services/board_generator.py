@@ -31,9 +31,8 @@ def generate_boards(words, board_size, card_count, word_mode):
         attempts = 0
         while attempts < 100:
             if word_mode == "same_shuffled":
-                # Use exactly the first cells_needed words, shuffled
-                card_words = words[:cells_needed]
-                random.shuffle(card_words)
+                # Pick cells_needed words randomly from the full pool
+                card_words = random.sample(words, cells_needed)
             else:
                 # different_per_board: sample from full pool
                 card_words = random.sample(words, min(cells_needed, len(words)))
