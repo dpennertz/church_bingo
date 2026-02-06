@@ -6,8 +6,8 @@ import os
 SETTINGS_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "saved_settings.json")
 
 DEFAULTS = {
-    "title": "Sermon BINGO",
-    "church_name": "",
+    "title": "Church BINGO",
+    "church_name": "First Presbyterian Church",
     "header_color": "#2c3e50",
     "border_color": "#34495e",
     "date": "",

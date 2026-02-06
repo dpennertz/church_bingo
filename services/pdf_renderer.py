@@ -47,8 +47,8 @@ def format_date(date_str):
 
 def generate_pdf(
     boards,
-    title="Sermon BINGO",
-    church_name="",
+    title="Church BINGO",
+    church_name="First Presbyterian Church",
     logo_path=None,
     header_color="#2c3e50",
     border_color="#34495e",

@@ -332,8 +332,8 @@ def bingo_customize():
         return render_template(
             "bingo/customize.html",
             step=4,
-            title=data.get("title", saved.get("title", "Sermon BINGO")),
-            church_name=data.get("church_name", saved.get("church_name", "")),
+            title=data.get("title", saved.get("title", "Church BINGO")),
+            church_name=data.get("church_name", saved.get("church_name", "First Presbyterian Church")),
             header_color=data.get("header_color", saved.get("header_color", "#2c3e50")),
             border_color=data.get("border_color", saved.get("border_color", "#34495e")),
             card_date=data.get("card_date", ""),
@@ -343,7 +343,7 @@ def bingo_customize():
         )
 
     # POST - save customization
-    data["title"] = request.form.get("title", "Sermon BINGO").strip() or "Sermon BINGO"
+    data["title"] = request.form.get("title", "Church BINGO").strip() or "Church BINGO"
     data["church_name"] = request.form.get("church_name", "").strip()
     data["header_color"] = request.form.get("header_color", "#2c3e50")
     data["border_color"] = request.form.get("border_color", "#34495e")
@@ -406,8 +406,8 @@ def bingo_preview():
         card_count=data.get("card_count", 10),
         word_mode=data.get("word_mode", "same_shuffled"),
         words=words,
-        title=data.get("title", "Sermon BINGO"),
-        church_name=data.get("church_name", ""),
+        title=data.get("title", "Church BINGO"),
+        church_name=data.get("church_name", "First Presbyterian Church"),
         header_color=data.get("header_color", "#2c3e50"),
         border_color=data.get("border_color", "#34495e"),
         card_date=format_date(raw_date),
@@ -438,8 +438,8 @@ def bingo_generate():
     # Generate PDF
     pdf_buffer = pdf_renderer.generate_pdf(
         boards=boards,
-        title=data.get("title", "Sermon BINGO"),
-        church_name=data.get("church_name", ""),
+        title=data.get("title", "Church BINGO"),
+        church_name=data.get("church_name", "First Presbyterian Church"),
         logo_path=data.get("logo_path"),
         header_color=data.get("header_color", "#2c3e50"),
         border_color=data.get("border_color", "#34495e"),
@@ -450,8 +450,8 @@ def bingo_generate():
     )
 
     # Create a safe filename
-    safe_title = "".join(c for c in data.get("title", "Sermon_BINGO") if c.isalnum() or c in " _-").strip()
-    safe_title = safe_title.replace(" ", "_") or "Sermon_BINGO"
+    safe_title = "".join(c for c in data.get("title", "Church_BINGO") if c.isalnum() or c in " _-").strip()
+    safe_title = safe_title.replace(" ", "_") or "Church_BINGO"
 
     return send_file(
         pdf_buffer,
