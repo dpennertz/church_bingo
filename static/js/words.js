@@ -99,10 +99,14 @@ document.addEventListener('DOMContentLoaded', function() {
         wordCountText.textContent = msg;
     }
 
-    // On form submit, collect selected words
+    // On form submit, collect selected words and custom words
     wordsForm.addEventListener('submit', function() {
         const selected = container.querySelectorAll('.word-chip.selected');
         const words = Array.from(selected).map(chip => chip.dataset.word);
         selectedWordsInput.value = JSON.stringify(words);
+
+        const custom = container.querySelectorAll('.word-chip.selected[data-source="custom"]');
+        const customWords = Array.from(custom).map(chip => chip.dataset.word);
+        document.getElementById('customWordsInput').value = JSON.stringify(customWords);
     });
 });

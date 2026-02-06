@@ -251,6 +251,14 @@ def bingo_words():
         return render_template("bingo/words.html", step=2, words=data.get("selected_words", []), word_counts=word_counts)
 
     data["selected_words"] = selected
+
+    # Track which words were manually added so they always appear on cards
+    custom_json = request.form.get("custom_words", "[]")
+    try:
+        data["custom_words"] = json.loads(custom_json)
+    except json.JSONDecodeError:
+        data["custom_words"] = []
+
     save_session_data(data)
     return redirect(url_for("bingo_configure"))
 
@@ -384,7 +392,8 @@ def bingo_preview():
 
     # Generate a single preview board
     preview_boards = board_generator.generate_boards(
-        words, board_size, 1, data.get("word_mode", "same_shuffled")
+        words, board_size, 1, data.get("word_mode", "same_shuffled"),
+        custom_words=data.get("custom_words", []),
     )
     preview_board = preview_boards[0]
 
@@ -421,7 +430,10 @@ def bingo_generate():
     word_mode = data.get("word_mode", "same_shuffled")
 
     # Generate all boards
-    boards = board_generator.generate_boards(words, board_size, card_count, word_mode)
+    boards = board_generator.generate_boards(
+        words, board_size, card_count, word_mode,
+        custom_words=data.get("custom_words", []),
+    )
 
     # Generate PDF
     pdf_buffer = pdf_renderer.generate_pdf(

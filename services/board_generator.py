@@ -22,20 +22,25 @@ def validate_word_count(words, board_size, card_count, word_mode):
     return True, "OK"
 
 
-def generate_boards(words, board_size, card_count, word_mode):
+def generate_boards(words, board_size, card_count, word_mode, custom_words=None):
     cells_needed = board_size * board_size - (1 if board_size == 5 else 0)
     boards = []
     seen = set()
 
+    # Custom words are guaranteed on every card; fill remaining slots randomly
+    guaranteed = [w for w in (custom_words or []) if w in words]
+    remaining_pool = [w for w in words if w not in guaranteed]
+
     for _ in range(card_count):
         attempts = 0
         while attempts < 100:
+            fill_needed = cells_needed - len(guaranteed)
             if word_mode == "same_shuffled":
-                # Pick cells_needed words randomly from the full pool
-                card_words = random.sample(words, cells_needed)
+                filler = random.sample(remaining_pool, fill_needed)
             else:
-                # different_per_board: sample from full pool
-                card_words = random.sample(words, min(cells_needed, len(words)))
+                filler = random.sample(remaining_pool, min(fill_needed, len(remaining_pool)))
+            card_words = guaranteed + filler
+            random.shuffle(card_words)
 
             board_key = tuple(card_words)
             if board_key not in seen or card_count > _factorial_limit(cells_needed):
