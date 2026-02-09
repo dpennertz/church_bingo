@@ -17,7 +17,7 @@ Your task:
    - Theological and biblical terms (grace, salvation, covenant, etc.)
    - Names of biblical figures mentioned in readings or sermon topics
    - Key theme words from the sermon title or scripture passages
-   - Worship-related words (praise, prayer, hymn, offering, etc.)
+   - Worship-related words (praise, glory, hallelujah, amen, etc.)
    - Seasonal or liturgical words if applicable (advent, lent, resurrection, etc.)
    - Specific place names or concepts from scripture readings listed
    - Words that children can recognize when they hear them
@@ -27,13 +27,20 @@ Your task:
    - Words too obscure for children to recognize
    - Proper names of church staff or committee members (unless biblical figures)
    - Very short words (1-2 letters)
+   - Service structure labels and section headings — these are parts of the printed \
+bulletin layout, NOT words spoken during the service. Exclude words like: hymn, hymns, \
+sermon, prelude, postlude, offertory, benediction, doxology, litany, liturgy, \
+invocation, processional, recessional, introit, anthem, interlude, meditation, \
+responsive, unison, congregation, announcements, bulletin, reading, readings, \
+testament, scripture, psalter, gloria, passing, greeting, assurance, confession, \
+pardon, affirmation, creed, concerns, joys, dismissal, charge, choral, response
 
 Return ONLY a JSON array of lowercase single words, no duplicates.
 Aim for approximately {target_count} words but return between {min_count} and {max_count}.
 Order them from most likely to be heard to least likely.
 
 Example output format:
-["grace", "salvation", "psalm", "offering", "covenant", "mercy", "faith", "prayer"]"""
+["grace", "salvation", "psalm", "covenant", "mercy", "faith", "shepherds", "kingdom"]"""
 
 USER_PROMPT = """Extract meaningful church service words from this bulletin:
 
@@ -42,6 +49,20 @@ USER_PROMPT = """Extract meaningful church service words from this bulletin:
 ---
 
 Return a JSON array of approximately {target_count} words."""
+
+
+# Service structure words that are section labels in bulletins, not spoken content.
+# These get filtered out even if the AI returns them.
+SERVICE_SECTION_WORDS = {
+    "hymn", "hymns", "sermon", "prelude", "postlude", "offertory", "benediction",
+    "doxology", "litany", "liturgy", "invocation", "processional", "recessional",
+    "introit", "anthem", "interlude", "meditation", "responsive", "unison",
+    "congregation", "announcements", "bulletin", "reading", "readings",
+    "testament", "scripture", "psalter", "gloria", "passing", "greeting",
+    "assurance", "confession", "pardon", "affirmation", "creed", "concerns",
+    "joys", "dismissal", "charge", "choral", "response", "call", "worship",
+    "opening", "closing", "prayer", "prayers", "old", "new",
+}
 
 
 def extract_words(bulletin_text, target_count=50):
@@ -93,12 +114,13 @@ def extract_words(bulletin_text, target_count=50):
                 "Could not parse word list from AI response. Please try again or add words manually."
             )
 
-    # Deduplicate and lowercase
+    # Deduplicate, lowercase, and filter out service section words
     seen = set()
     unique = []
     for w in words:
         w_lower = w.strip().lower()
-        if w_lower and w_lower not in seen and len(w_lower) >= 3:
+        if (w_lower and w_lower not in seen and len(w_lower) >= 3
+                and w_lower not in SERVICE_SECTION_WORDS):
             seen.add(w_lower)
             unique.append(w_lower)
 
